@@ -28,7 +28,7 @@ source "qemu" "centos" {
   shutdown_command = "echo 'packer' | sudo -S shutdown -P now"
   ssh_password     = "Password"
   ssh_username     = "centos"
-  vm_name = "${var.cn_flag == "true" ? "centos-7-cn.img" : "centos-7.img"}"
+  vm_name          = "${var.cn_flag == "true" ? "centos-7-cn.img" : "centos-7.img"}"
 
   qemuargs = [
     ["-m", "2048M"],
