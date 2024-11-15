@@ -24,7 +24,7 @@ source "qemu" "centos" {
   headless         = true
   iso_checksum     = "284aab2b23d91318f169ff464bce4d53404a15a0618ceb34562838c59af4adea"
   iso_url          = "https://cloud.centos.org/centos/7/images/CentOS-7-x86_64-GenericCloud-2211.qcow2"
-  output_directory = "output-centos"
+  output_directory = "${var.cn_flag == "true" ? "output-centos-cn" : "output-centos"}"
   shutdown_command = "echo 'packer' | sudo -S shutdown -P now"
   ssh_password     = "Password"
   ssh_username     = "centos"
