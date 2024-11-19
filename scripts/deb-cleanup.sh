@@ -1,6 +1,5 @@
 #!/bin/bash -eux
 echo "==> remove SSH keys used for building"
-rm -f /home/ubuntu/.ssh/authorized_keys
 rm -f /root/.ssh/authorized_keys
 
 echo "==> Clear out machine id"
