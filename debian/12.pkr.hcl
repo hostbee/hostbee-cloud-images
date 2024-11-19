@@ -41,6 +41,7 @@ build {
     // NOTE: cleanup.sh should always be run last, as this performs post-install cleanup tasks
     scripts = [
       "scripts/deb-install.sh",
+      "scripts/beautify-ssh.sh",
       "scripts/deb-cleanup.sh"
     ]
   }
