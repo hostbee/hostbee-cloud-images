@@ -40,8 +40,8 @@ build {
     execute_command = "echo 'packer' | sudo -S sh -c '{{ .Vars }} {{ .Path }}'"
     // NOTE: cleanup.sh should always be run last, as this performs post-install cleanup tasks
     scripts = [
-      "scripts/install.sh",
-      "scripts/cleanup.sh"
+      "scripts/deb-install.sh",
+      "scripts/deb-cleanup.sh"
     ]
   }
 }
