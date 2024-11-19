@@ -9,6 +9,11 @@ variable "ubuntu_version" {
   default     = "noble"
 }
 
+variable "cn_flag" {
+  type        = string
+  default     = "false"
+}
+
 source "qemu" "ubuntu" {
   accelerator      = var.qemu_accelerator
   cd_files         = ["./http/*"]
@@ -19,11 +24,11 @@ source "qemu" "ubuntu" {
   headless         = true
   iso_checksum     = "file:https://cloud-images.ubuntu.com/${var.ubuntu_version}/current/SHA256SUMS"
   iso_url          = "https://cloud-images.ubuntu.com/${var.ubuntu_version}/current/${var.ubuntu_version}-server-cloudimg-amd64.img"
-  output_directory = "output-${var.ubuntu_version}"
+  output_directory = "${var.cn_flag == "true"? "output-ubuntu-cn" : "output-ubuntu"}"
   shutdown_command = "echo 'packer' | sudo -S shutdown -P now"
   ssh_password     = "Password"
   ssh_username     = "ubuntu"
-  vm_name          = "ubuntu-${var.ubuntu_version}.img"
+  vm_name          = "${var.cn_flag == "true"? "ubuntu-24-cn" : "ubuntu-24"}"
 
   qemuargs = [
     ["-m", "2048M"],
@@ -35,13 +40,17 @@ source "qemu" "ubuntu" {
 build {
   sources = ["source.qemu.ubuntu"]
 
+  environment_vars = [
+    "CN_FLAG=${var.cn_flag}"
+  ]
+
   provisioner "shell" {
     // run scripts with sudo, as the default cloud image user is unprivileged
     execute_command = "echo 'packer' | sudo -S sh -c '{{ .Vars }} {{ .Path }}'"
     // NOTE: cleanup.sh should always be run last, as this performs post-install cleanup tasks
     scripts = [
-      "scripts/ubu-install.sh",
-      "scripts/ubu-cleanup.sh"
+      "scripts/deb-install.sh",
+      "scripts/deb-cleanup.sh"
     ]
   }
 }
