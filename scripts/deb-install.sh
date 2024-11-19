@@ -6,6 +6,14 @@ while [ ! -f /var/lib/cloud/instance/boot-finished ]; do
     sleep 1
 done
 
+echo "==> change repo souces"
+if [ "$CN_FLAG" == "true" ]; then
+    echo "use CN sources"
+    sudo sed -i's/deb.debian.org/mirrors.tuna.tsinghua.edu.cn/g' /etc/apt/sources.list
+else
+    echo "use default sources"
+fi
+
 echo "==> updating apt cache"
 sudo apt-get update -qq
 
