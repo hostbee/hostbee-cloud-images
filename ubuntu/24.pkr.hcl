@@ -47,6 +47,10 @@ build {
   provisioner "shell" {
     // run scripts with sudo, as the default cloud image user is unprivileged
     execute_command = "echo 'packer' | sudo -S sh -c '{{ .Vars }} {{ .Path }}'"
+
+    inline = [
+      "sudo sed -i '/^ubuntu:/s@:[^:]*$@:/usr/sbin/nologin@' /etc/passwd"
+    ]
     // NOTE: cleanup.sh should always be run last, as this performs post-install cleanup tasks
     scripts = [
       "scripts/deb-install.sh",
