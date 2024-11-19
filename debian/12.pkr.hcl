@@ -26,8 +26,8 @@ source "qemu" "debian" {
   vm_name          = "debian-bookworm.img"
 
   qemuargs = [
-    ["-m", "16384M"],
-    ["-smp", "8"],
+    ["-m", "2048M"],
+    ["-smp", "2"],
     ["-serial", "mon:stdio"],
   ]
 }
