@@ -40,13 +40,13 @@ source "qemu" "ubuntu" {
 build {
   sources = ["source.qemu.ubuntu"]
 
-  environment_vars = [
-    "CN_FLAG=${var.cn_flag}"
-  ]
-
   provisioner "shell" {
     // run scripts with sudo, as the default cloud image user is unprivileged
     execute_command = "echo 'packer' | sudo -S sh -c '{{ .Vars }} {{ .Path }}'"
+
+    environment_vars = [
+      "CN_FLAG=${var.cn_flag}"
+    ]
 
     inline = [
       "sudo sed -i '/^ubuntu:/s@:[^:]*$@:/usr/sbin/nologin@' /etc/passwd"
