@@ -4,6 +4,9 @@ echo "==> remove SSH keys used for building"
 rm -f /home/centos/.ssh/authorized_keys
 rm -f /root/.ssh/authorized_keys
 
+echo "==> setting up nologin for centos user"
+usermod -s /sbin/nologin centos
+
 echo "==> Clear out machine id"
 truncate -s 0 /etc/machine-id
 
