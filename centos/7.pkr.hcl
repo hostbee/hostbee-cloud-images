@@ -48,9 +48,6 @@ build {
     "CN_FLAG=${var.cn_flag}"
     ]
 
-    inline = [
-      "sudo sed -i '/^centos:/s@:[^:]*$@:/usr/sbin/nologin@' /etc/passwd"
-    ]
     // NOTE: cleanup.sh should always be run last, as this performs post-install cleanup tasks
     scripts = [
       "scripts/rhel-install.sh",
