@@ -16,3 +16,5 @@ echo "==> setting up root login"
 sed -i 's/^#\?PermitRootLogin.*/PermitRootLogin yes/' /etc/ssh/sshd_config
 sed -i 's/^PasswordAuthentication.*/PasswordAuthentication yes/' /etc/ssh/sshd_config
 systemctl restart sshd
+
+sed -i 's/^disable_root: true/disable_root: false/' /etc/cloud/cloud.cfg
