@@ -3,3 +3,4 @@ password: Password
 ssh_pwauth: true
 chpasswd:
   expire: false
+disable_root: false
