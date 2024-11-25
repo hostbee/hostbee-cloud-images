@@ -21,7 +21,7 @@ packer init .
 Additionally, you can build the images for mainland China by setting the `cn_flag` to `true`. For example:
 
 ```
-packer build debian/12.pkr.hcl -var cn_flag=true
+packer build -var cn_flag=true debian/12.pkr.hcl
 ```
 
 This will build the Debian 12 image with the mainland China mirrors.
