@@ -49,7 +49,7 @@ build {
     ]
     // NOTE: cleanup.sh should always be run last, as this performs post-install cleanup tasks
     scripts = [
-      "scripts/ubu-install.sh",
+      "scripts/ubu-24-install.sh",
       "scripts/beautify-ssh.sh",
       "scripts/ubu-cleanup.sh"
     ]
