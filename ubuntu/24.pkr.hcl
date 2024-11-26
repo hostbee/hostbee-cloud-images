@@ -28,7 +28,7 @@ source "qemu" "ubuntu" {
   shutdown_command = "echo 'packer' | sudo -S shutdown -P now"
   ssh_password     = "Password"
   ssh_username     = "ubuntu"
-  vm_name          = "${var.cn_flag == "true"? "ubuntu-24-cn" : "ubuntu-24"}"
+  vm_name          = "${var.cn_flag == "true"? "ubuntu-24-cn.img" : "ubuntu-24.img"}"
 
   qemuargs = [
     ["-m", "2048M"],
