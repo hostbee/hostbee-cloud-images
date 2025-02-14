@@ -22,8 +22,8 @@ source "qemu" "debian" {
   disk_image       = true
   disk_size        = "10G"
   headless         = true
-  iso_checksum     = "7f141e18bb775f3dc9e74869605cd30eef2e603e0e9298fcdb903314cf5bc931250e66d6ff9c32a2a97abc60f405185fe96e11ea4035fe3748427ebb36f5a49e"
-  iso_url          = "https://cdimage.debian.org/images/cloud/bullseye/20241111-1928/debian-11-generic-amd64-20241111-1928.qcow2"
+  iso_checksum_url = "file:https://cdimage.debian.org/images/cloud/bullseye/latest/SHA512SUMS"
+  iso_url          = "https://cdimage.debian.org/images/cloud/bullseye/latest/debian-11-generic-amd64.qcow2"
   output_directory = "${var.cn_flag == "true" ? "output-debian-11-cn" : "output-debian-11"}"
   shutdown_command = "echo 'packer' | sudo -S shutdown -P now"
   ssh_password     = "Password"
