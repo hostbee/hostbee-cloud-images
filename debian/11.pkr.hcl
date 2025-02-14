@@ -28,7 +28,7 @@ source "qemu" "debian" {
   shutdown_command = "echo 'packer' | sudo -S shutdown -P now"
   ssh_password     = "Password"
   ssh_username     = "debian"
-  vm_name          = "${var.cn_flag == "true" ? "debian-bullseye-cn.img" : "debian-bullseye.img"}"
+  vm_name          = "${var.cn_flag == "true" ? "debian-11-cn.img" : "debian-11.img"}"
 
   qemuargs = [
     ["-m", "2048M"],

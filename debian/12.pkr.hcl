@@ -24,11 +24,11 @@ source "qemu" "debian" {
   headless         = true
   iso_checksum     = "a5fc7e7c055de3ba47a2bda105fad21c9b645163583e9e45311adab5bb552551e5ed131d5ccab6c3b1257a60689fd9140b0a40f93cd64c6dcc31210c0bb9386e"
   iso_url          = "https://cdimage.debian.org/images/cloud/bookworm/20241110-1927/debian-12-generic-amd64-20241110-1927.qcow2"
-  output_directory = "${var.cn_flag == "true" ? "output-debian-cn" : "output-debian"}"
+  output_directory = "${var.cn_flag == "true" ? "output-debian-12-cn" : "output-debian-12"}"
   shutdown_command = "echo 'packer' | sudo -S shutdown -P now"
   ssh_password     = "Password"
   ssh_username     = "debian"
-  vm_name          = "${var.cn_flag == "true" ? "debian-bookworm-cn.img" : "debian-bookworm.img"}"
+  vm_name          = "${var.cn_flag == "true" ? "debian-12-cn.img" : "debian-12.img"}"
 
   qemuargs = [
     ["-m", "2048M"],
