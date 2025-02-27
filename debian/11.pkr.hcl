@@ -22,7 +22,7 @@ source "qemu" "debian" {
   disk_image       = true
   disk_size        = "10G"
   headless         = true
-  iso_checksum_url = "file:https://cdimage.debian.org/images/cloud/bullseye/latest/SHA512SUMS"
+  iso_checksum     = "file:https://cdimage.debian.org/images/cloud/bullseye/latest/SHA512SUMS"
   iso_url          = "https://cdimage.debian.org/images/cloud/bullseye/latest/debian-11-generic-amd64.qcow2"
   output_directory = "${var.cn_flag == "true" ? "output-debian-11-cn" : "output-debian-11"}"
   shutdown_command = "echo 'packer' | sudo -S shutdown -P now"
