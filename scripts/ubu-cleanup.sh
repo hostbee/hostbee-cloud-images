@@ -3,9 +3,6 @@ echo "==> remove SSH keys used for building"
 rm -f /home/ubuntu/.ssh/authorized_keys
 rm -f /root/.ssh/authorized_keys
 
-echo "==> setting up nologin for ubuntu user"
-usermod -s /sbin/nologin ubuntu
-
 echo "==> Clear out machine id"
 truncate -s 0 /etc/machine-id
 
