@@ -2,9 +2,6 @@
 echo "==> remove SSH keys used for building"
 rm -f /root/.ssh/authorized_keys
 
-echo "==> setting up nologin for debian user"
-usermod -s /usr/sbin/nologin debian
-
 echo "==> Clear out machine id"
 truncate -s 0 /etc/machine-id
 
