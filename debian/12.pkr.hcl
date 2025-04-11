@@ -14,6 +14,11 @@ variable "cn_flag" {
   default     = "false"
 }
 
+locals {
+  ssh_private_key_file = "ssh_key"
+  ssh_public_key_file  = "ssh_key.pub"
+}
+
 source "qemu" "debian" {
   accelerator      = var.qemu_accelerator
   cd_files         = ["./http/*"]
@@ -25,9 +30,10 @@ source "qemu" "debian" {
   iso_checksum     = "file:https://cdimage.debian.org/images/cloud/bookworm/latest/SHA512SUMS"
   iso_url          = "https://cdimage.debian.org/images/cloud/bookworm/latest/debian-12-generic-amd64.qcow2"
   output_directory = "${var.cn_flag == "true" ? "output-debian-12-cn" : "output-debian-12"}"
-  shutdown_command = "echo 'packer' | sudo -S shutdown -P now"
-  ssh_password     = "Password"
-  ssh_username     = "debian"
+  shutdown_command = "sudo -S shutdown -P now"
+  ssh_username           = "builder"
+  ssh_private_key_file   = local.ssh_private_key_file
+  ssh_clear_authorized_keys = true
   vm_name          = "${var.cn_flag == "true" ? "debian-12-cn.img" : "debian-12.img"}"
 
   qemuargs = [
@@ -42,7 +48,7 @@ build {
 
   provisioner "shell" {
     // run scripts with sudo, as the default cloud image user is unprivileged
-    execute_command = "echo 'packer' | sudo -S sh -c '{{ .Vars }} {{ .Path }}'"
+    execute_command = "sudo -S sh -c '{{ .Vars }} {{ .Path }}'"
 
     environment_vars = [
     "CN_FLAG=${var.cn_flag}"
