@@ -14,6 +14,11 @@ variable "cn_flag" {
   default     = "false"
 }
 
+locals {
+  ssh_private_key_file = "ssh_key"
+  ssh_public_key_file  = "ssh_key.pub"
+}
+
 source "qemu" "ubuntu" {
   accelerator      = var.qemu_accelerator
   cd_files         = ["./http/*"]
@@ -25,9 +30,10 @@ source "qemu" "ubuntu" {
   iso_checksum     = "file:https://cloud-images.ubuntu.com/${var.ubuntu_version}/current/SHA256SUMS"
   iso_url          = "https://cloud-images.ubuntu.com/${var.ubuntu_version}/current/${var.ubuntu_version}-server-cloudimg-amd64.img"
   output_directory = "${var.cn_flag == "true"? "output-ubuntu-22-cn" : "output-ubuntu-22"}"
-  shutdown_command = "echo 'packer' | sudo -S shutdown -P now"
-  ssh_password     = "Password"
-  ssh_username     = "ubuntu"
+  shutdown_command = "sudo -S shutdown -P now"
+  ssh_username           = "builder"
+  ssh_private_key_file   = local.ssh_private_key_file
+  ssh_clear_authorized_keys = true
   vm_name          = "${var.cn_flag == "true"? "ubuntu-22-cn.img" : "ubuntu-22.img"}"
 
   qemuargs = [
@@ -42,7 +48,7 @@ build {
 
   provisioner "shell" {
     // run scripts with sudo, as the default cloud image user is unprivileged
-    execute_command = "echo 'packer' | sudo -S sh -c '{{ .Vars }} {{ .Path }}'"
+    execute_command = "sudo -S sh -c '{{ .Vars }} {{ .Path }}'"
 
     environment_vars = [
       "CN_FLAG=${var.cn_flag}"
