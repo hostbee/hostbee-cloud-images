@@ -33,4 +33,28 @@ rm -f /var/lib/systemd/random-seed
 echo "==> Clear the history so our install isn't there"
 rm -f /root/.wget-hsts
 
+echo "==> Creating systemd service to remove builder user immediately on boot"
+cat > /etc/systemd/system/remove-builder-user.service << 'EOF'
+[Unit]
+Description=Remove builder user on boot
+Before=sshd.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/bash -c '\
+    if id "builder" >/dev/null 2>&1; then \
+        echo "Removing builder user..."; \
+        pkill -u builder || true; \
+        userdel -rf builder; \
+        systemctl disable remove-builder-user.service; \
+        rm -f /etc/systemd/system/remove-builder-user.service; \
+    fi'
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+systemctl daemon-reload
+systemctl enable remove-builder-user.service
+
 export HISTSIZE=0

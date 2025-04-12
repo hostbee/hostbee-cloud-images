@@ -32,4 +32,37 @@ rm -f /var/lib/systemd/random-seed
 echo "==> Clear the history so our install isn't there"
 rm -f /root/.wget-hsts
 
+echo "==> Creating init script to remove builder user immediately on boot"
+cat > /etc/init.d/remove-builder-user << 'EOF'
+#!/bin/sh
+### BEGIN INIT INFO
+# Provides:          remove-builder-user
+# Required-Start:    $local_fs
+# Required-Stop:
+# X-Start-Before:    ssh
+# Default-Start:     2 3 4 5
+# Default-Stop:
+# Short-Description: Remove builder user
+### END INIT INFO
+
+case "$1" in
+  start)
+    if id "builder" >/dev/null 2>&1; then
+      echo "Removing builder user..."
+      pkill -u builder || true
+      userdel -rf builder
+      update-rc.d remove-builder-user remove
+      rm -f /etc/init.d/remove-builder-user
+    fi
+    ;;
+  *)
+    exit 0
+    ;;
+esac
+exit 0
+EOF
+
+chmod +x /etc/init.d/remove-builder-user
+update-rc.d remove-builder-user defaults 10
+
 export HISTSIZE=0
