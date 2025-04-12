@@ -1,6 +1,26 @@
 #cloud-config
-password: Password
-ssh_pwauth: true
-chpasswd:
-  expire: false
+ssh_pwauth: false
 disable_root: false
+
+users:
+  - name: builder
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    shell: /bin/bash
+    ssh_authorized_keys:
+      - $(<ssh_key.pub)
+
+version: 2
+network:
+  version: 2
+  renderer: auto
+  ethernets:
+    eth0:
+      addresses:
+        - 10.114.51.134/24
+      routes:
+        - to: default
+          via: 10.114.51.4
+      nameservers:
+        addresses: [223.5.5.5]
+      dhcp4: no
+      dhcp6: no
