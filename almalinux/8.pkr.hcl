@@ -22,7 +22,7 @@ source "qemu" "almalinux" {
   disk_size                 = "10G"
   headless                  = true
   iso_checksum              = "file:https://repo.almalinux.org/almalinux/8/cloud/x86_64/images/CHECKSUM"
-  iso_url                   = "https://repo.almalinux.org/almalinux/8/cloud/x86_64/images/almalinux-8-GenericCloud-latest.x86_64.qcow2"
+  iso_url                   = "https://repo.almalinux.org/almalinux/8/cloud/x86_64/images/AlmaLinux-8-GenericCloud-latest.x86_64.qcow2"
   output_directory          = "${var.cn_flag == "true" ? "output-almalinux-cn" : "output-almalinux"}"
   shutdown_command          = "sudo -S shutdown -P now"
   ssh_username              = "builder"
