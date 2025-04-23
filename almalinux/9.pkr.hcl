@@ -23,7 +23,7 @@ source "qemu" "almalinux" {
   headless                  = true
   iso_checksum              = "file:https://repo.almalinux.org/almalinux/9/cloud/x86_64/images/CHECKSUM"
   iso_url                   = "https://repo.almalinux.org/almalinux/9/cloud/x86_64/images/AlmaLinux-9-GenericCloud-latest.x86_64.qcow2"
-  output_directory          = "${var.cn_flag == "true" ? "output-almalinux-cn" : "output-almalinux"}"
+  output_directory          = "${var.cn_flag == "true" ? "output-almalinux-9-cn" : "output-almalinux-9"}"
   shutdown_command          = "sudo -S shutdown -P now"
   ssh_username              = "builder"
   ssh_private_key_file      = local.ssh_private_key_file
