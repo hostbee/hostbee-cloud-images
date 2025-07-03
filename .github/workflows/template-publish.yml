@@ -1,0 +1,69 @@
+name: publish
+
+on:
+  workflow_call:
+    inputs:
+      TEMPLATE:
+        required: true
+        type: string
+      CN_FLAG:
+        required: true
+        type: boolean
+      BUCKET:
+        required: true
+        type: string
+      MINIO_DIR:
+        required: true
+        type: string
+
+jobs:
+  publish:
+    environment: OSS_KEYS
+    runs-on: [self-hosted]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup
+        uses: ./.github/actions/setup
+        with:
+          MINIO_ENDPOINT: ${{ vars.MINIO_ENDPOINT }}
+          MINIO_ACCESS_KEY: ${{ secrets.MINIO_ACCESS_KEY }}
+          MINIO_SECRET_KEY: ${{ secrets.MINIO_SECRET_KEY }}
+          R2_ENDPOINT: ${{ vars.R2_ENDPOINT }}
+          R2_ACCESS_KEY: ${{ secrets.R2_ACCESS_KEY }}
+          R2_SECRET_KEY: ${{ secrets.R2_SECRET_KEY }}
+
+      - name: Build
+        run: |
+          ssh-keygen -t rsa -b 2048 -f ./ssh_key -N ""
+          packer init .
+          packer build \
+            -var cn_flag=${{ inputs.CN_FLAG }} \
+            -var allow_root_login=${{ vars.ALLOW_ROOT_LOGIN }} \
+            -var allow_password_login=${{ vars.ALLOW_PASSWORD_LOGIN }} \
+            ${{ inputs.TEMPLATE }}
+
+      - name: Upload
+        id: upload
+        run: |
+          img_path=$(find output-* -maxdepth 1 -name '*.img' | head -n 1)
+          if [ -z "$img_path" ]; then
+            echo "ERROR: Not found output-*/xxx.img"
+            exit 1
+          fi
+          echo "Found: $img_path"
+
+          img_name=$(basename "$img_path")
+          sha_path="$img_path.sha256.txt"
+
+          if [ ! -f "$sha_path" ]; then
+            sha256sum "$img_path" | awk '{print $1}' > "$sha_path"
+          fi
+
+          mc cp "$img_path" "hostbee_minio/${{ inputs.BUCKET }}/${{ inputs.MINIO_DIR }}/$img_name"
+          mc cp "$sha_path" "hostbee_minio/${{ inputs.BUCKET }}/${{ inputs.MINIO_DIR }}/$img_name.sha256.txt"
+
+          mc cp "$img_path" "hostbee_r2/${{ inputs.BUCKET }}/${{ inputs.MINIO_DIR }}/$img_name"
+          mc cp "$sha_path" "hostbee_r2/${{ inputs.BUCKET }}/${{ inputs.MINIO_DIR }}/$img_name.sha256.txt"

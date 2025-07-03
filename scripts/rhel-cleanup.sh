@@ -34,7 +34,7 @@ echo "==> Clear the history so our install isn't there"
 rm -f /root/.wget-hsts
 
 echo "==> Creating systemd service to remove builder user immediately on boot"
-cat > /etc/systemd/system/remove-builder-user.service << 'EOF'
+cat >/etc/systemd/system/remove-builder-user.service <<'EOF'
 [Unit]
 Description=Remove builder user on boot
 Before=sshd.service

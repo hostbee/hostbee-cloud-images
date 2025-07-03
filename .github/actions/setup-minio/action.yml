@@ -1,0 +1,45 @@
+name: "Setup MinIO"
+description: "Setup MinIO"
+inputs:
+  MINIO_ENDPOINT:
+    required: true
+  MINIO_ACCESS_KEY:
+    required: true
+  MINIO_SECRET_KEY:
+    required: true
+  R2_ENDPOINT:
+    required: true
+  R2_ACCESS_KEY:
+    required: true
+  R2_SECRET_KEY:
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Get MinIO Version
+      shell: bash
+      run: |
+        wget https://dl.min.io/client/mc/release/linux-amd64/mc.sha256sum
+
+    # Cache MinIO CLI
+    - uses: actions/cache@v4
+      with:
+        path: ~/.cache/minio-cli
+        key: minio-cli-${{ runner.os }}-${{ hashFiles('mc.sha256sum') }}
+
+    - name: Setup MinIO CLI
+      shell: bash
+      run: |
+        mkdir -p ~/.cache/minio-cli
+        if [ ! -f ~/.cache/minio-cli/mc ]; then
+          wget -O ~/.cache/minio-cli/mc https://dl.min.io/client/mc/release/linux-amd64/mc
+        fi
+        chmod +x ~/.cache/minio-cli/mc
+        cp ~/.cache/minio-cli/mc /usr/local/bin/mc
+
+    - name: Configure MinIO alias
+      shell: bash
+      run: |
+        mc alias set hostbee_minio "${{ inputs.MINIO_ENDPOINT }}" "${{ inputs.MINIO_ACCESS_KEY }}" "${{ inputs.MINIO_SECRET_KEY }}"
+        mc alias set hostbee_r2 "${{ inputs.R2_ENDPOINT }}" "${{ inputs.R2_ACCESS_KEY }}" "${{ inputs.R2_SECRET_KEY }}"

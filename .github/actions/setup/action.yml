@@ -1,0 +1,55 @@
+name: "Setup"
+description: "Setup"
+inputs:
+  MINIO_ENDPOINT:
+    required: true
+  MINIO_ACCESS_KEY:
+    required: true
+  MINIO_SECRET_KEY:
+    required: true
+  R2_ENDPOINT:
+    required: true
+  R2_ACCESS_KEY:
+    required: true
+  R2_SECRET_KEY:
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Setup APT
+      shell: bash
+      run: |
+        curl --retry 3 --retry-delay 5 -fsSL https://apt.releases.hashicorp.com/gpg | gpg --dearmor -o hashicorp-archive-keyring.gpg
+        mv hashicorp-archive-keyring.gpg /usr/share/keyrings/hashicorp-archive-keyring.gpg
+        echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/hashicorp.list
+        apt-get update
+        apt-get install -f -y
+
+    # Cache APT
+    - uses: dsx137/deb-cache@main
+      with:
+        PACKAGES: |
+          qemu-utils
+          qemu-system-x86
+          libvirt-daemon-system
+          virtinst
+          bridge-utils
+          packer
+
+    - name: Cache Packer plugins
+      uses: actions/cache@v4
+      with:
+        path: ~/.packer.d/plugins
+        key: packer-plugins-${{ runner.os }}-${{ hashFiles('**/*.hcl', '**/*.json') }}
+        restore-keys: |
+          packer-plugins${{ runner.os }}-
+
+    - uses: ./.github/actions/setup-minio
+      with:
+        MINIO_ENDPOINT: ${{ inputs.MINIO_ENDPOINT }}
+        MINIO_ACCESS_KEY: ${{ inputs.MINIO_ACCESS_KEY }}
+        MINIO_SECRET_KEY: ${{ inputs.MINIO_SECRET_KEY }}
+        R2_ENDPOINT: ${{ inputs.R2_ENDPOINT }}
+        R2_ACCESS_KEY: ${{ inputs.R2_ACCESS_KEY }}
+        R2_SECRET_KEY: ${{ inputs.R2_SECRET_KEY }}

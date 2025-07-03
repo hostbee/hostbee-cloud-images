@@ -9,8 +9,7 @@ done
 echo "==> change repo souces"
 if [ "$CN_FLAG" == "true" ]; then
     echo "use CN sources"
-    sudo curl -o /etc/yum.repos.d/CentOS-Base.repo https://mirrors.aliyun.com/repo/Centos-7.repo
-    sudo sed -i -e '/mirrors.cloud.aliyuncs.com/d' -e '/mirrors.aliyuncs.com/d' /etc/yum.repos.d/CentOS-Base.repo
+    sudo curl -o /etc/yum.repos.d/CentOS-Base.repo https://mirrors.huaweicloud.com/repository/conf/CentOS-7-reg.repo
 else
     echo "use global sources"
     sudo curl -o /etc/yum.repos.d/CentOS-Base.repo https://raw.githubusercontent.com/akatsukiro/centos7-eol-repo-fix/main/CentOS-Base.repo

@@ -1,0 +1,96 @@
+name: publish-all
+
+on:
+  workflow_call:
+    inputs:
+      CN_FLAG:
+        required: true
+        type: boolean
+      WORKFLOW_REF:
+        required: true
+        type: string
+
+jobs:
+  get-stamp:
+    runs-on: [self-hosted]
+    outputs:
+      STAMP: ${{ steps.get-stamp.outputs.STAMP }}
+    steps:
+      - name: Get Stamp
+        id: get-stamp
+        run: |
+          today=$(TZ=Asia/Shanghai date +%Y-%m-%d)
+          runs=$(curl -s \
+            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            "https://api.github.com/repos/hostbee/hostbee-cloud-images/actions/workflows/${{ inputs.WORKFLOW_REF }}/runs?per_page=100&status=completed"
+          )
+          if ! echo "$runs" | jq .workflow_runs >/dev/null 2>&1; then
+            echo "ERROR: Failed to parse workflow runs."
+            exit 1
+          fi
+          count=$(echo "$runs" | jq "[.workflow_runs[] | select((.created_at | startswith(\"${today}\")) and .conclusion == \"success\")] | length")
+          stamp=${today}_$((count + 1))
+          echo "Stamp: $stamp"
+          echo "STAMP=$stamp" >> $GITHUB_OUTPUT
+
+  get-bucket:
+    runs-on: [self-hosted]
+    outputs:
+      BUCKET: ${{ steps.get-bucket.outputs.BUCKET }}
+    steps:
+      - name: Get Bucket
+        id: get-bucket
+        run: |
+          if [ "${{ inputs.CN_FLAG }}" = "true" ]; then
+            echo "BUCKET=hostbee-cloud-images-cn" >> $GITHUB_OUTPUT
+          else
+            echo "BUCKET=hostbee-cloud-images" >> $GITHUB_OUTPUT
+          fi
+
+  publish-batch:
+    needs: [get-stamp, get-bucket]
+    uses: ./.github/workflows/template-publish.yml
+    strategy:
+      # max-parallel: 2
+      matrix:
+        TEMPLATE:
+          - almalinux/8.pkr.hcl
+          - almalinux/9.pkr.hcl
+          - centos/7.pkr.hcl
+          - debian/11.pkr.hcl
+          - debian/12.pkr.hcl
+          - rocky/8.pkr.hcl
+          - rocky/9.pkr.hcl
+          - ubuntu/20.pkr.hcl
+          - ubuntu/22.pkr.hcl
+          - ubuntu/24.pkr.hcl
+    with:
+      TEMPLATE: ${{ matrix.TEMPLATE }}
+      CN_FLAG: ${{ inputs.CN_FLAG }}
+      BUCKET: ${{ needs.get-bucket.outputs.BUCKET }}
+      MINIO_DIR: weekly/${{ needs.get-stamp.outputs.STAMP }}
+    secrets: inherit
+
+  update-latest:
+    environment: OSS_KEYS
+    needs: [get-stamp, get-bucket, publish-batch]
+    runs-on: [self-hosted]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup MinIO
+        uses: ./.github/actions/setup-minio
+        with:
+          MINIO_ENDPOINT: ${{ vars.MINIO_ENDPOINT }}
+          MINIO_ACCESS_KEY: ${{ secrets.MINIO_ACCESS_KEY }}
+          MINIO_SECRET_KEY: ${{ secrets.MINIO_SECRET_KEY }}
+          R2_ENDPOINT: ${{ vars.R2_ENDPOINT }}
+          R2_ACCESS_KEY: ${{ secrets.R2_ACCESS_KEY }}
+          R2_SECRET_KEY: ${{ secrets.R2_SECRET_KEY }}
+
+      - name: Update Latest
+        run: |
+          echo "/weekly/${{ needs.get-stamp.outputs.STAMP }}" > "./LATEST_BUILD.txt"
+          mc cp "./LATEST_BUILD.txt" "hostbee_minio/${{ needs.get-bucket.outputs.BUCKET }}/LATEST_BUILD.txt"
+          mc cp "./LATEST_BUILD.txt" "hostbee_r2/${{ needs.get-bucket.outputs.BUCKET }}/LATEST_BUILD.txt"

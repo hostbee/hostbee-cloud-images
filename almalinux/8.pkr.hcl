@@ -1,34 +1,51 @@
 variable "qemu_accelerator" {
-  type        = string
-  default     = "kvm"
+  type    = string
+  default = "kvm"
 }
 
 variable "cn_flag" {
-  type        = string
-  default     = "false"
+  type    = string
+  default = "false"
+}
+
+variable "allow_root_login" {
+  type    = string
+  default = "false"
+}
+
+variable "allow_password_login" {
+  type    = string
+  default = "false"
 }
 
 locals {
   ssh_private_key_file = "ssh_key"
   ssh_public_key_file  = "ssh_key.pub"
+  meta_data_content    = file("${path.cwd}/http/meta-data")
+  user_data_content = templatefile("${path.cwd}/http/user-data.pkrtpl.hcl", {
+    ssh_public_key = file("${path.cwd}/${local.ssh_public_key_file}")
+  })
 }
 
 source "qemu" "almalinux" {
-  accelerator               = var.qemu_accelerator
-  cd_files                  = ["./http/*"]
+  accelerator = var.qemu_accelerator
+  cd_content = {
+    "/meta-data" = local.meta_data_content
+    "/user-data" = local.user_data_content
+  }
   cd_label                  = "cidata"
   disk_compression          = true
   disk_image                = true
   disk_size                 = "10G"
   headless                  = true
-  iso_checksum              = "file:https://repo.almalinux.org/almalinux/8/cloud/x86_64/images/CHECKSUM"
-  iso_url                   = "https://repo.almalinux.org/almalinux/8/cloud/x86_64/images/AlmaLinux-8-GenericCloud-latest.x86_64.qcow2"
+  iso_checksum              = "file:https://mirror.nju.edu.cn/almalinux/8/cloud/x86_64/images/CHECKSUM"
+  iso_url                   = "https://mirror.nju.edu.cn/almalinux/8/cloud/x86_64/images/AlmaLinux-8-GenericCloud-latest.x86_64.qcow2"
   output_directory          = "${var.cn_flag == "true" ? "output-almalinux-8-cn" : "output-almalinux-8"}"
   shutdown_command          = "sudo -S shutdown -P now"
   ssh_username              = "builder"
   ssh_private_key_file      = local.ssh_private_key_file
   ssh_clear_authorized_keys = true
-  vm_name                   = "${var.cn_flag == "true" ? "almalinux-8-cn.img" : "almalinux-8.img"}"
+  vm_name                   = "almalinux-8.img"
   cpu_model                 = "host"
 
   qemuargs = [
@@ -44,9 +61,11 @@ build {
   provisioner "shell" {
     // run scripts with sudo, as the default cloud image user is unprivileged
     execute_command = "sudo -S sh -c '{{ .Vars }} {{ .Path }}'"
-    
+
     environment_vars = [
-    "CN_FLAG=${var.cn_flag}"
+      "CN_FLAG=${var.cn_flag}",
+      "ALLOW_ROOT_LOGIN=${var.allow_root_login}",
+      "ALLOW_PASSWORD_LOGIN=${var.allow_password_login}"
     ]
 
     // NOTE: cleanup.sh should always be run last, as this performs post-install cleanup tasks
