@@ -10,9 +10,9 @@ echo "==> change repo souces"
 if [ "$CN_FLAG" == "true" ]; then
     echo "use CN sources"
     sudo sed -e 's|^mirrorlist=|#mirrorlist=|g' \
-    -e 's|^#\s*baseurl=https://repo.almalinux.org/almalinux|baseurl=https://mirrors.zju.edu.cn/almalinux|g' \
-    -i.bak \
-    /etc/yum.repos.d/almalinux*.repo
+        -e 's|^#\s*baseurl=https://repo.almalinux.org/almalinux|baseurl=https://mirrors.nju.edu.cn/almalinux|g' \
+        -i.bak \
+        /etc/yum.repos.d/almalinux*.repo
 else
     echo "use default sources"
 fi

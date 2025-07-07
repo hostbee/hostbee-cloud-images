@@ -1,0 +1,21 @@
+name: publish-all-cn
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "30 15 * * 4"
+  push:
+    branches:
+      - dev-ci
+
+concurrency:
+  group: publish-all-cn
+  cancel-in-progress: true
+
+jobs:
+  publish-all-cn:
+    uses: ./.github/workflows/template-publish-all.yml
+    with:
+      CN_FLAG: true
+      WORKFLOW_REF: publish-all-cn.yml
+    secrets: inherit

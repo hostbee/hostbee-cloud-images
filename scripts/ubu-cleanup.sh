@@ -33,7 +33,7 @@ echo "==> Clear the history so our install isn't there"
 rm -f /root/.wget-hsts
 
 echo "==> Creating init script to remove builder user immediately on boot"
-cat > /etc/init.d/remove-builder-user << 'EOF'
+cat >/etc/init.d/remove-builder-user <<'EOF'
 #!/bin/sh
 ### BEGIN INIT INFO
 # Provides:          remove-builder-user

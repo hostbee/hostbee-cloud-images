@@ -9,7 +9,7 @@ done
 echo "==> change repo souces"
 if [ "$CN_FLAG" == "true" ]; then
     echo "use CN sources"
-    sudo cat > /etc/apt/sources.list.d/ubuntu.sources <<EOF
+    sudo cat >/etc/apt/sources.list.d/ubuntu.sources <<EOF
 Types: deb
 URIs: https://mirrors.tuna.tsinghua.edu.cn/ubuntu
 Suites: noble noble-updates noble-backports

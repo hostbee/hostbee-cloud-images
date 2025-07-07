@@ -10,10 +10,10 @@ echo "==> change repo souces"
 if [ "$CN_FLAG" == "true" ]; then
     echo "use CN sources"
     sudo sed -e 's|^mirrorlist=|#mirrorlist=|g' \
-         -e 's|^#baseurl=http://dl.rockylinux.org/$contentdir|baseurl=https://mirrors.zju.edu.cn/rocky|g' \
-         -i.bak \
-         /etc/yum.repos.d/rocky-extras.repo \
-         /etc/yum.repos.d/rocky.repo
+        -e 's|^#baseurl=http://dl.rockylinux.org/$contentdir|baseurl=https://mirror.sjtu.edu.cn/rocky|g' \
+        -i.bak \
+        /etc/yum.repos.d/rocky-extras.repo \
+        /etc/yum.repos.d/rocky.repo
 else
     echo "use default sources"
 fi

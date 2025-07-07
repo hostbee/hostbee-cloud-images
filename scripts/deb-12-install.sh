@@ -9,7 +9,7 @@ done
 echo "==> change repo souces"
 if [ "$CN_FLAG" == "true" ]; then
     echo "use CN sources"
-    sudo cat > /etc/apt/sources.list.d/debian.sources <<EOF
+    sudo cat >/etc/apt/sources.list.d/debian.sources <<EOF
 Types: deb
 URIs: https://mirrors.tuna.tsinghua.edu.cn/debian
 Suites: bookworm bookworm-updates bookworm-backports
