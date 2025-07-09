@@ -53,14 +53,14 @@ jobs:
             echo "ERROR: Not found output-*/xxx.img"
             exit 1
           fi
+          img_path=$(realpath "$img_path")
           echo "Found: $img_path"
 
           img_name=$(basename "$img_path")
-          sha_path="$img_path.sha256.txt"
+          sha_path="${img_path}.sha256.txt"
 
-          if [ ! -f "$sha_path" ]; then
-            sha256sum "$img_path" | awk '{print $1}' > "$sha_path"
-          fi
+          cd "$(dirname "$img_path")"
+          sha256sum "$img_name" > "$sha_path"
 
           mc cp "$img_path" "hostbee_minio/${{ inputs.BUCKET }}/${{ inputs.MINIO_DIR }}/$img_name"
           mc cp "$sha_path" "hostbee_minio/${{ inputs.BUCKET }}/${{ inputs.MINIO_DIR }}/$img_name.sha256.txt"
