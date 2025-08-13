@@ -44,8 +44,8 @@ source "qemu" "debian" {
   disk_image                = true
   disk_size                 = "10G"
   headless                  = true
-  iso_checksum              = "file:https://mirrors.cernet.edu.cn/debian-cdimage/cloud/bookworm/latest/SHA512SUMS"
-  iso_url                   = "https://mirrors.cernet.edu.cn/debian-cdimage/cloud/bookworm/latest/debian-12-generic-amd64.qcow2"
+  iso_checksum              = "file:https://mirrors.ustc.edu.cn/debian-cdimage/cloud/bookworm/latest/SHA512SUMS"
+  iso_url                   = "https://mirrors.ustc.edu.cn/debian-cdimage/cloud/bookworm/latest/debian-12-generic-amd64.qcow2"
   output_directory          = "${var.cn_flag == "true" ? "output-debian-12-cn" : "output-debian-12"}"
   shutdown_command          = "sudo -S shutdown -P now"
   ssh_username              = "builder"

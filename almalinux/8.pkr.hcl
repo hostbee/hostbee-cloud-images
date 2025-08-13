@@ -38,8 +38,8 @@ source "qemu" "almalinux" {
   disk_image                = true
   disk_size                 = "10G"
   headless                  = true
-  iso_checksum              = "file:https://mirrors.cernet.edu.cn/almalinux/8/cloud/x86_64/images/CHECKSUM"
-  iso_url                   = "https://mirrors.cernet.edu.cn/almalinux/8/cloud/x86_64/images/AlmaLinux-8-GenericCloud-latest.x86_64.qcow2"
+  iso_checksum              = "file:https://mirror.nju.edu.cn/almalinux/8/cloud/x86_64/images/CHECKSUM"
+  iso_url                   = "https://mirror.nju.edu.cn/almalinux/8/cloud/x86_64/images/AlmaLinux-8-GenericCloud-latest.x86_64.qcow2"
   output_directory          = "${var.cn_flag == "true" ? "output-almalinux-8-cn" : "output-almalinux-8"}"
   shutdown_command          = "sudo -S shutdown -P now"
   ssh_username              = "builder"

@@ -38,8 +38,8 @@ source "qemu" "rocky" {
   disk_image                = true
   disk_size                 = "10G"
   headless                  = true
-  iso_checksum              = "file:https://mirrors.cernet.edu.cn/rocky/8/images/x86_64/Rocky-8-GenericCloud.latest.x86_64.qcow2.CHECKSUM"
-  iso_url                   = "https://mirrors.cernet.edu.cn/rocky/8/images/x86_64/Rocky-8-GenericCloud.latest.x86_64.qcow2"
+  iso_checksum              = "file:https://mirrors.ustc.edu.cn/rocky/8/images/x86_64/Rocky-8-GenericCloud.latest.x86_64.qcow2.CHECKSUM"
+  iso_url                   = "https://mirrors.ustc.edu.cn/rocky/8/images/x86_64/Rocky-8-GenericCloud.latest.x86_64.qcow2"
   output_directory          = "${var.cn_flag == "true" ? "output-rocky-8-cn" : "output-rocky-8"}"
   shutdown_command          = "sudo -S shutdown -P now"
   ssh_username              = "builder"

@@ -9,10 +9,10 @@ done
 echo "==> change repo souces"
 if [ "$CN_FLAG" == "true" ]; then
     echo "use CN sources"
-    sudo sed -i 's/deb.debian.org/mirrors.cernet.edu.cn/g' /etc/apt/sources.list
+    sudo sed -i 's/deb.debian.org/mirrors.ustc.edu.cn/g' /etc/apt/sources.list
     sudo sed -i -e 's|security.debian.org/\? |security.debian.org/debian-security |g' \
-            -e 's|security.debian.org|mirrors.cernet.edu.cn|g' \
-            -e 's|deb.debian.org/debian-security|mirrors.cernet.edu.cn/debian-security|g' \
+            -e 's|security.debian.org|mirrors.ustc.edu.cn|g' \
+            -e 's|deb.debian.org/debian-security|mirrors.ustc.edu.cn/debian-security|g' \
             /etc/apt/sources.list
 else
     echo "use default sources"
