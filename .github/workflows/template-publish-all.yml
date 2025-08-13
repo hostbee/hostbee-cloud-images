@@ -34,7 +34,7 @@ jobs:
           echo "STAMP=$stamp" >> $GITHUB_OUTPUT
 
   get-bucket:
-    runs-on: [self-hosted]
+    runs-on: [get-stamp]
     outputs:
       BUCKET: ${{ steps.get-bucket.outputs.BUCKET }}
     steps:
