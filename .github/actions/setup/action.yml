@@ -27,7 +27,7 @@ runs:
         apt-get install -f -y
 
     # Cache APT
-    - uses: dsx137/deb-cache@main
+    - uses: hostbee/deb-cache@main
       with:
         PACKAGES: |
           qemu-utils

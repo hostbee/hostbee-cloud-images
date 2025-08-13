@@ -46,12 +46,23 @@ jobs:
           else
             echo "BUCKET=hostbee-cloud-images" >> $GITHUB_OUTPUT
           fi
+      - name: Sending Feishu Message
+        uses: hostbee/feishu@main
+        env:
+          FEISHU_CUSTOMERBOT_WEBHOOK: ${{ secrets.FEISHU_CUSTOMERBOT_WEBHOOK }}
+          FEISHU_CUSTOMERBOT_SECRET: ${{ secrets.FEISHU_CUSTOMERBOT_SECRET }}
+          MSGTYPE: interactive
+          TITLE: "Cloud Images Build Start"
+          CONTENT: |
+            > Cloud Images Build Start.
+            > Build ID: ${{ needs.get-stamp.outputs.STAMP }}
+            > CN: ${{ inputs.CN_FLAG }}
 
   publish-batch:
     needs: [get-stamp, get-bucket]
     uses: ./.github/workflows/template-publish.yml
     strategy:
-      # max-parallel: 2
+      max-parallel: 2
       matrix:
         TEMPLATE:
           - almalinux/8.pkr.hcl
@@ -93,3 +104,15 @@ jobs:
           echo "/weekly/${{ needs.get-stamp.outputs.STAMP }}" > "./LATEST_BUILD.txt"
           mc cp "./LATEST_BUILD.txt" "hostbee_minio/${{ needs.get-bucket.outputs.BUCKET }}/LATEST_BUILD.txt"
           mc cp "./LATEST_BUILD.txt" "hostbee_r2/${{ needs.get-bucket.outputs.BUCKET }}/LATEST_BUILD.txt"
+
+      - name: Sending Feishu Message
+        uses: hostbee/feishu@main
+        env:
+          FEISHU_CUSTOMERBOT_WEBHOOK: ${{ secrets.FEISHU_CUSTOMERBOT_WEBHOOK }}
+          FEISHU_CUSTOMERBOT_SECRET: ${{ secrets.FEISHU_CUSTOMERBOT_SECRET }}
+          MSGTYPE: interactive
+          TITLE: "Cloud Images Build Done"
+          CONTENT: |
+            > Cloud Images Build Done.
+            > Build ID: ${{ needs.get-stamp.outputs.STAMP }}
+            > CN: ${{ inputs.CN_FLAG }}
