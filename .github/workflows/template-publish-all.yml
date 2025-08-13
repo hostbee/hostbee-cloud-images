@@ -56,7 +56,6 @@ jobs:
         TEMPLATE:
           - almalinux/8.pkr.hcl
           - almalinux/9.pkr.hcl
-          - centos/7.pkr.hcl
           - debian/11.pkr.hcl
           - debian/12.pkr.hcl
           - rocky/8.pkr.hcl
