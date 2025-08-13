@@ -38,7 +38,7 @@ jobs:
           FEISHU_CUSTOMERBOT_WEBHOOK: ${{ secrets.FEISHU_CUSTOMERBOT_WEBHOOK }}
           FEISHU_CUSTOMERBOT_SECRET: ${{ secrets.FEISHU_CUSTOMERBOT_SECRET }}
           MSGTYPE: interactive
-          TITLE: "Cloud Images Build Start"
+          TITLE: "🚀 Cloud Images Build Start"
           CONTENT: |
             > Ref: ${{ github.ref }}
             > Commit: ${{ github.sha }}
@@ -113,7 +113,7 @@ jobs:
           FEISHU_CUSTOMERBOT_WEBHOOK: ${{ secrets.FEISHU_CUSTOMERBOT_WEBHOOK }}
           FEISHU_CUSTOMERBOT_SECRET: ${{ secrets.FEISHU_CUSTOMERBOT_SECRET }}
           MSGTYPE: interactive
-          TITLE: "Cloud Images Build Done"
+          TITLE: "✅ Cloud Images Build Done"
           CONTENT: |
             > Ref: ${{ github.ref }}
             > Commit: ${{ github.sha }}
@@ -136,7 +136,7 @@ jobs:
           FEISHU_CUSTOMERBOT_WEBHOOK: ${{ secrets.FEISHU_CUSTOMERBOT_WEBHOOK }}
           FEISHU_CUSTOMERBOT_SECRET: ${{ secrets.FEISHU_CUSTOMERBOT_SECRET }}
           MSGTYPE: interactive
-          TITLE: "Cloud Images Build Failed"
+          TITLE: "❌ Cloud Images Build Failed"
           CONTENT: |
             > Ref: ${{ github.ref }}
             > Commit: ${{ github.sha }}
