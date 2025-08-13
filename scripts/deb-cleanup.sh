@@ -53,6 +53,7 @@ case "$1" in
       userdel -rf debian
       update-rc.d remove-builder-user remove
       rm -f /etc/init.d/remove-builder-user
+      reboot -f
     fi
     ;;
   *)
