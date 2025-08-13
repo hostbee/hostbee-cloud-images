@@ -44,8 +44,8 @@ source "qemu" "ubuntu" {
   disk_image                = true
   disk_size                 = "10G"
   headless                  = true
-  iso_checksum              = "file:https://mirrors.ustc.edu.cn/ubuntu-cloud-images/${var.ubuntu_version}/current/SHA256SUMS"
-  iso_url                   = "https://mirrors.ustc.edu.cn/ubuntu-cloud-images/${var.ubuntu_version}/current/${var.ubuntu_version}-server-cloudimg-amd64.img"
+  iso_checksum              = "file:https://mirror.nju.edu.cn/ubuntu-cloud-images/${var.ubuntu_version}/current/SHA256SUMS"
+  iso_url                   = "https://mirror.nju.edu.cn/ubuntu-cloud-images/${var.ubuntu_version}/current/${var.ubuntu_version}-server-cloudimg-amd64.img"
   output_directory          = "${var.cn_flag == "true" ? "output-ubuntu-20-cn" : "output-ubuntu-20"}"
   shutdown_command          = "sudo -S shutdown -P now"
   ssh_username              = "builder"
