@@ -40,9 +40,10 @@ jobs:
           MSGTYPE: interactive
           TITLE: "Cloud Images Build Start"
           CONTENT: |
-            > Cloud Images Build Start.
+            > Ref: ${{ github.ref }}
             > Build ID: ${{ steps.get-stamp.outputs.STAMP }}
             > CN: ${{ inputs.CN_FLAG }}
+            > Log: https://github.com/hostbee/hostbee-cloud-images/actions/runs/${{ github.run_id }}
 
   get-bucket:
     runs-on: [self-hosted]
@@ -62,7 +63,7 @@ jobs:
     needs: [get-stamp, get-bucket]
     uses: ./.github/workflows/template-publish.yml
     strategy:
-      max-parallel: 2
+      max-parallel: 4
       matrix:
         TEMPLATE:
           - almalinux/8.pkr.hcl
@@ -113,6 +114,28 @@ jobs:
           MSGTYPE: interactive
           TITLE: "Cloud Images Build Done"
           CONTENT: |
-            > Cloud Images Build Done.
+            > Ref: ${{ github.ref }}
             > Build ID: ${{ needs.get-stamp.outputs.STAMP }}
             > CN: ${{ inputs.CN_FLAG }}
+            > Log: https://github.com/hostbee/hostbee-cloud-images/actions/runs/${{ github.run_id }}
+
+  message-on-fail:
+    needs: [publish-batch]
+    if: ${{ always() && (failure() || cancelled()) }}
+    environment: OSS_KEYS
+    runs-on: [self-hosted]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Sending Feishu Message
+        uses: hostbee/feishu@main
+        env:
+          FEISHU_CUSTOMERBOT_WEBHOOK: ${{ secrets.FEISHU_CUSTOMERBOT_WEBHOOK }}
+          FEISHU_CUSTOMERBOT_SECRET: ${{ secrets.FEISHU_CUSTOMERBOT_SECRET }}
+          MSGTYPE: interactive
+          TITLE: "Cloud Images Build Failed"
+          CONTENT: |
+            > Ref: ${{ github.ref }}
+            > CN: ${{ inputs.CN_FLAG }}
+            > Log: https://github.com/hostbee/hostbee-cloud-images/actions/runs/${{ github.run_id }}
