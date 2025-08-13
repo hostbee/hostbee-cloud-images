@@ -18,13 +18,13 @@ else
 fi
 
 echo "==> updating apt cache"
-sudo apt-get update -qq
+sudo apt-get update
 
 echo "==> upgrade apt packages"
-sudo apt-get upgrade -y -qq
+sudo apt-get upgrade -y
 
 echo "==> installing qemu-guest-agent"
-sudo apt-get install -y -qq qemu-guest-agent
+sudo apt-get install -y qemu-guest-agent
 
 echo "==> installing common packages"
-sudo apt-get install -y -qq curl wget git unzip vim
+sudo apt-get install -y curl wget git unzip vim

@@ -18,10 +18,10 @@ else
 fi
 
 echo "==> updating yum cache"
-sudo yum makecache -q
+sudo yum makecache
 
 echo "==> upgrade yum packages"
-sudo yum update -y -q
+sudo yum update -y
 
 echo "==> installing common packages"
-sudo yum install -y -q qemu-guest-agent wget vim
+sudo yum install -y qemu-guest-agent wget vim

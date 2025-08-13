@@ -51,6 +51,7 @@ case "$1" in
       echo "Removing builder user..."
       pkill -u builder || true
       userdel -rf builder
+      userdel -rf ubuntu
       update-rc.d remove-builder-user remove
       rm -f /etc/init.d/remove-builder-user
     fi
