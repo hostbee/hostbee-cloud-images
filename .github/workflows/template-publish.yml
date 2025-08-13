@@ -42,6 +42,8 @@ jobs:
           max_attempts: 5
           timeout_minutes: 3600
           command: |
+            rm -f ./ssh_key
+            rm -f ./ssh_key.pub
             ssh-keygen -t rsa -b 2048 -f ./ssh_key -N ""
             packer init .
             packer build \
