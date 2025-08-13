@@ -32,9 +32,20 @@ jobs:
           stamp=${today}_$((count + 1))
           echo "Stamp: $stamp"
           echo "STAMP=$stamp" >> $GITHUB_OUTPUT
+      - name: Sending Feishu Message
+        uses: hostbee/feishu@main
+        env:
+          FEISHU_CUSTOMERBOT_WEBHOOK: ${{ secrets.FEISHU_CUSTOMERBOT_WEBHOOK }}
+          FEISHU_CUSTOMERBOT_SECRET: ${{ secrets.FEISHU_CUSTOMERBOT_SECRET }}
+          MSGTYPE: interactive
+          TITLE: "Cloud Images Build Start"
+          CONTENT: |
+            > Cloud Images Build Start.
+            > Build ID: ${{ steps.get-stamp.outputs.STAMP }}
+            > CN: ${{ inputs.CN_FLAG }}
 
   get-bucket:
-    runs-on: [get-stamp]
+    runs-on: [self-hosted]
     outputs:
       BUCKET: ${{ steps.get-bucket.outputs.BUCKET }}
     steps:
@@ -46,17 +57,6 @@ jobs:
           else
             echo "BUCKET=hostbee-cloud-images" >> $GITHUB_OUTPUT
           fi
-      - name: Sending Feishu Message
-        uses: hostbee/feishu@main
-        env:
-          FEISHU_CUSTOMERBOT_WEBHOOK: ${{ secrets.FEISHU_CUSTOMERBOT_WEBHOOK }}
-          FEISHU_CUSTOMERBOT_SECRET: ${{ secrets.FEISHU_CUSTOMERBOT_SECRET }}
-          MSGTYPE: interactive
-          TITLE: "Cloud Images Build Start"
-          CONTENT: |
-            > Cloud Images Build Start.
-            > Build ID: ${{ needs.get-stamp.outputs.STAMP }}
-            > CN: ${{ inputs.CN_FLAG }}
 
   publish-batch:
     needs: [get-stamp, get-bucket]
