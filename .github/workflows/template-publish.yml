@@ -40,6 +40,7 @@ jobs:
         uses: nick-fields/retry@v3
         with:
           max_attempts: 5
+          timeout_minutes: 3600
           command: |
             ssh-keygen -t rsa -b 2048 -f ./ssh_key -N ""
             packer init .
@@ -54,6 +55,7 @@ jobs:
         uses: nick-fields/retry@v3
         with:
           max_attempts: 5
+          timeout_minutes: 3600
           command: |
             img_path=$(find output-* -maxdepth 1 -name '*.img' | head -n 1)
             if [ -z "$img_path" ]; then
