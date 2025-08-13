@@ -20,6 +20,9 @@ jobs:
   publish:
     environment: OSS_KEYS
     runs-on: [self-hosted]
+    retry:
+      count: 1
+      when: ${{ failure() || cancelled() }}
 
     steps:
       - name: Checkout
@@ -36,34 +39,41 @@ jobs:
           R2_SECRET_KEY: ${{ secrets.R2_SECRET_KEY }}
 
       - name: Build
-        run: |
-          ssh-keygen -t rsa -b 2048 -f ./ssh_key -N ""
-          packer init .
-          packer build \
-            -var cn_flag=${{ inputs.CN_FLAG }} \
-            -var allow_root_login=${{ vars.ALLOW_ROOT_LOGIN }} \
-            -var allow_password_login=${{ vars.ALLOW_PASSWORD_LOGIN }} \
-            ${{ inputs.TEMPLATE }}
+        id: build
+        uses: nick-fields/retry@v3
+        with:
+          max_attempts: 5
+          command: |
+            ssh-keygen -t rsa -b 2048 -f ./ssh_key -N ""
+            packer init .
+            packer build \
+              -var cn_flag=${{ inputs.CN_FLAG }} \
+              -var allow_root_login=${{ vars.ALLOW_ROOT_LOGIN }} \
+              -var allow_password_login=${{ vars.ALLOW_PASSWORD_LOGIN }} \
+              ${{ inputs.TEMPLATE }}
 
       - name: Upload
         id: upload
-        run: |
-          img_path=$(find output-* -maxdepth 1 -name '*.img' | head -n 1)
-          if [ -z "$img_path" ]; then
-            echo "ERROR: Not found output-*/xxx.img"
-            exit 1
-          fi
-          img_path=$(realpath "$img_path")
-          echo "Found: $img_path"
+        uses: nick-fields/retry@v3
+        with:
+          max_attempts: 5
+          command: |
+            img_path=$(find output-* -maxdepth 1 -name '*.img' | head -n 1)
+            if [ -z "$img_path" ]; then
+              echo "ERROR: Not found output-*/xxx.img"
+              exit 1
+            fi
+            img_path=$(realpath "$img_path")
+            echo "Found: $img_path"
 
-          img_name=$(basename "$img_path")
-          sha_path="${img_path}.sha256.txt"
+            img_name=$(basename "$img_path")
+            sha_path="${img_path}.sha256.txt"
 
-          cd "$(dirname "$img_path")"
-          sha256sum "$img_name" > "$sha_path"
+            cd "$(dirname "$img_path")"
+            sha256sum "$img_name" > "$sha_path"
 
-          mc cp "$img_path" "hostbee_minio/${{ inputs.BUCKET }}/${{ inputs.MINIO_DIR }}/$img_name"
-          mc cp "$sha_path" "hostbee_minio/${{ inputs.BUCKET }}/${{ inputs.MINIO_DIR }}/$img_name.sha256.txt"
+            mc cp "$img_path" "hostbee_minio/${{ inputs.BUCKET }}/${{ inputs.MINIO_DIR }}/$img_name"
+            mc cp "$sha_path" "hostbee_minio/${{ inputs.BUCKET }}/${{ inputs.MINIO_DIR }}/$img_name.sha256.txt"
 
-          mc cp "$img_path" "hostbee_r2/${{ inputs.BUCKET }}/${{ inputs.MINIO_DIR }}/$img_name"
-          mc cp "$sha_path" "hostbee_r2/${{ inputs.BUCKET }}/${{ inputs.MINIO_DIR }}/$img_name.sha256.txt"
+            mc cp "$img_path" "hostbee_r2/${{ inputs.BUCKET }}/${{ inputs.MINIO_DIR }}/$img_name"
+            mc cp "$sha_path" "hostbee_r2/${{ inputs.BUCKET }}/${{ inputs.MINIO_DIR }}/$img_name.sha256.txt"
