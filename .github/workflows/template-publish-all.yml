@@ -41,6 +41,7 @@ jobs:
           TITLE: "Cloud Images Build Start"
           CONTENT: |
             > Ref: ${{ github.ref }}
+            > Commit: ${{ github.sha }}
             > Build ID: ${{ steps.get-stamp.outputs.STAMP }}
             > CN: ${{ inputs.CN_FLAG }}
             > Log: https://github.com/hostbee/hostbee-cloud-images/actions/runs/${{ github.run_id }}
@@ -115,6 +116,7 @@ jobs:
           TITLE: "Cloud Images Build Done"
           CONTENT: |
             > Ref: ${{ github.ref }}
+            > Commit: ${{ github.sha }}
             > Build ID: ${{ needs.get-stamp.outputs.STAMP }}
             > CN: ${{ inputs.CN_FLAG }}
             > Log: https://github.com/hostbee/hostbee-cloud-images/actions/runs/${{ github.run_id }}
@@ -137,5 +139,6 @@ jobs:
           TITLE: "Cloud Images Build Failed"
           CONTENT: |
             > Ref: ${{ github.ref }}
+            > Commit: ${{ github.sha }}
             > CN: ${{ inputs.CN_FLAG }}
             > Log: https://github.com/hostbee/hostbee-cloud-images/actions/runs/${{ github.run_id }}
