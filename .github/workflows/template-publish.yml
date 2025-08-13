@@ -20,9 +20,6 @@ jobs:
   publish:
     environment: OSS_KEYS
     runs-on: [self-hosted]
-    retry:
-      count: 1
-      when: ${{ failure() || cancelled() }}
 
     steps:
       - name: Checkout
