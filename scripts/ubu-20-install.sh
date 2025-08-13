@@ -9,8 +9,8 @@ done
 echo "==> change repo souces"
 if [ "$CN_FLAG" == "true" ]; then
     echo "use CN sources"
-    sudo sed -i 's@//.*archive.ubuntu.com@//mirrors.ustc.edu.cn@g' /etc/apt/sources.list
-    sudo sed -i 's/security.ubuntu.com/mirrors.ustc.edu.cn/g' /etc/apt/sources.list
+    sudo sed -i 's@//.*archive.ubuntu.com@//mirrors.cernet.edu.cn@g' /etc/apt/sources.list
+    sudo sed -i 's/security.ubuntu.com/mirrors.cernet.edu.cn/g' /etc/apt/sources.list
     sudo sed -i 's/http:/https:/g' /etc/apt/sources.list
 
 else
