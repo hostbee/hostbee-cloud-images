@@ -9,22 +9,11 @@ done
 echo "==> change repo souces"
 if [ "$CN_FLAG" == "true" ]; then
     echo "use CN sources"
-    sudo cat >/etc/apt/sources.list <<EOF
-# 默认注释了源码镜像以提高 apt update 速度，如有需要可自行取消注释
-deb https://mirrors.tuna.tsinghua.edu.cn/debian/ bullseye main contrib non-free
-# deb-src https://mirrors.tuna.tsinghua.edu.cn/debian/ bullseye main contrib non-free
-
-deb https://mirrors.tuna.tsinghua.edu.cn/debian/ bullseye-updates main contrib non-free
-# deb-src https://mirrors.tuna.tsinghua.edu.cn/debian/ bullseye-updates main contrib non-free
-
-deb https://mirrors.tuna.tsinghua.edu.cn/debian/ bullseye-backports main contrib non-free
-# deb-src https://mirrors.tuna.tsinghua.edu.cn/debian/ bullseye-backports main contrib non-free
-
-# 以下安全更新软件源包含了官方源与镜像站配置，如有需要可自行修改注释切换
-deb https://security.debian.org/debian-security bullseye-security main contrib non-free
-# deb-src https://security.debian.org/debian-security bullseye-security main contrib non-free
-EOF
-
+    sudo sed -i 's/deb.debian.org/mirrors.ustc.edu.cn/g' /etc/apt/sources.list
+    sudo sed -i -e 's|security.debian.org/\? |security.debian.org/debian-security |g' \
+            -e 's|security.debian.org|mirrors.ustc.edu.cn|g' \
+            -e 's|deb.debian.org/debian-security|mirrors.ustc.edu.cn/debian-security|g' \
+            /etc/apt/sources.list
 else
     echo "use default sources"
 fi
