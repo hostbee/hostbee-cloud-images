@@ -16,6 +16,9 @@ jobs:
     outputs:
       STAMP: ${{ steps.get-stamp.outputs.STAMP }}
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
       # Always use the build from local Minio
       - name: Get Stamp
         id: get-stamp
