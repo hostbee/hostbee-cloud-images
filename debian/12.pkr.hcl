@@ -76,7 +76,8 @@ build {
     scripts = [
       "scripts/deb-12-install.sh",
       "scripts/beautify-ssh.sh",
-      "scripts/deb-cleanup.sh"
+      "scripts/deb-cleanup.sh",
+      "scripts/user-cleanup.sh"
     ]
   }
 }

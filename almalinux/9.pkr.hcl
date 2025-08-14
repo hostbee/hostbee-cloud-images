@@ -72,7 +72,8 @@ build {
     scripts = [
       "scripts/almalinux-9-install.sh",
       "scripts/beautify-ssh.sh",
-      "scripts/rhel-cleanup.sh"
+      "scripts/rhel-cleanup.sh",
+      "scripts/user-cleanup.sh"
     ]
   }
 }

@@ -76,7 +76,8 @@ build {
     scripts = [
       "scripts/ubu-22-install.sh",
       "scripts/beautify-ssh.sh",
-      "scripts/ubu-cleanup.sh"
+      "scripts/ubu-cleanup.sh",
+      "scripts/user-cleanup.sh"
     ]
   }
 }

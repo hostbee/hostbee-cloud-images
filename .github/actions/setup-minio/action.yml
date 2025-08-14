@@ -42,4 +42,4 @@ runs:
       shell: bash
       run: |
         mc alias set hostbee_minio "${{ inputs.MINIO_ENDPOINT }}" "${{ inputs.MINIO_ACCESS_KEY }}" "${{ inputs.MINIO_SECRET_KEY }}"
-        mc alias set hostbee_r2 "${{ inputs.R2_ENDPOINT }}" "${{ inputs.R2_ACCESS_KEY }}" "${{ inputs.R2_SECRET_KEY }}"
+        mc alias set hostbee_r2 "${{ inputs.R2_ENDPOINT }}" "${{ inputs.R2_ACCESS_KEY }}" "${{ inputs.R2_SECRET_KEY }}" --api s3v4
