@@ -47,7 +47,7 @@ source "qemu" "debian" {
   iso_checksum              = "file:https://mirror.nju.edu.cn/debian-cdimage/cloud/bookworm/latest/SHA512SUMS"
   iso_url                   = "https://mirror.nju.edu.cn/debian-cdimage/cloud/bookworm/latest/debian-12-generic-amd64.qcow2"
   output_directory          = "${var.cn_flag == "true" ? "output-debian-12-cn" : "output-debian-12"}"
-  shutdown_command          = "sudo -S /root/cleanup.sh"
+  shutdown_command          = "sudo -S sh -c /root/cleanup.sh"
   shutdown_timeout          = "15s"
   ssh_username              = "builder"
   ssh_private_key_file      = local.ssh_private_key_file

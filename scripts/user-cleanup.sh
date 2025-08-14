@@ -4,6 +4,8 @@ echo "===> Write cleanup.sh for final cleanup"
 
 cat > /root/cleanup.sh <<EOL
 #!/bin/bash -eux
+set -e
+set -u
 
 USER_TO_REMOVE="ec2-user fedora rocky almalinux debian ubuntu centos rhel builder"
 

@@ -41,7 +41,7 @@ source "qemu" "almalinux" {
   iso_checksum              = "file:https://mirror.nju.edu.cn/almalinux/9/cloud/x86_64/images/CHECKSUM"
   iso_url                   = "https://mirror.nju.edu.cn/almalinux/9/cloud/x86_64/images/AlmaLinux-9-GenericCloud-latest.x86_64.qcow2"
   output_directory          = "${var.cn_flag == "true" ? "output-almalinux-9-cn" : "output-almalinux-9"}"
-  shutdown_command          = "sudo -S /root/cleanup.sh"
+  shutdown_command          = "sudo -S sh -c /root/cleanup.sh"
   shutdown_timeout          = "15s"
   ssh_username              = "builder"
   ssh_private_key_file      = local.ssh_private_key_file
