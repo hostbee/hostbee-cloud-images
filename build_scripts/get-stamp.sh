@@ -9,7 +9,7 @@ else
   BUCKET=hostbee-cloud-images
 fi
 
-CURRENT_STAMP=$(curl -s "https://s3.tcloud.net/$BUCKET/LATEST_BUILD.txt")
+CURRENT_STAMP=$(curl -s "https://s3.4299.net/$BUCKET/LATEST_BUILD.txt")
 
 STAMP=""
 
