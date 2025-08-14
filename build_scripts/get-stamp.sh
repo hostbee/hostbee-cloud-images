@@ -1,4 +1,4 @@
-#!/bin/bash -eux
+#!/bin/bash
 
 echo "CN_FLAG: ${CN_FLAG}"
 
