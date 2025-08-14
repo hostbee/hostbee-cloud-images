@@ -2,7 +2,6 @@
 
 echo "CN_FLAG: ${CN_FLAG}"
 echo "WORKFLOW_REF: ${WORKFLOW_REF}"
-echo "MINIO_ENDPOINT2: ${{ vars.MINIO_ENDPOINT }}"
 echo "MINIO_ENDPOINT: ${MINIO_ENDPOINT}"
 
 TODAY=$(TZ=Asia/Shanghai date +%Y-%m-%d)
