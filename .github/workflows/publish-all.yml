@@ -3,7 +3,7 @@ name: publish-all
 on:
   workflow_dispatch:
   schedule:
-    - cron: "30 15 * * 4"
+    - cron: "01 16 * * 4"
   push:
     branches:
       - main
