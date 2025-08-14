@@ -6,9 +6,9 @@ on:
       CN_FLAG:
         required: true
         type: boolean
-    MINIO_ENDPOINT:
-      required: true
-      type: string
+      MINIO_ENDPOINT:
+        required: true
+        type: string
       WORKFLOW_REF:
         required: true
         type: string
