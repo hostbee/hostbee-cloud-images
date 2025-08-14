@@ -9,6 +9,7 @@ echo "==> Remove users from /etc/passwd and /etc/shadow"
 
 USER_TO_REMOVE=(ec2-user fedora rocky almalinux debian ubuntu centos rhel builder)
 for user in "${USER_TO_REMOVE[@]}"; do
+    echo "==> Remove user $user"
     sed -i "/$user/d" /etc/passwd
     sed -i "/$user/d" /etc/shadow
 done
