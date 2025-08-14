@@ -1,13 +1,8 @@
 #!/bin/bash
 
 cat >/etc/motd <<EOF
-      :::    :::  ::::::::   :::::::: ::::::::::: :::::::::  :::::::::: ::::::::::
-     :+:    :+: :+:    :+: :+:    :+:    :+:     :+:    :+: :+:        :+:
-    +:+    +:+ +:+    +:+ +:+           +:+     +:+    +:+ +:+        +:+
-   +#++:++#++ +#+    +:+ +#++:++#++    +#+     +#++:++#+  +#++:++#   +#++:++#
-  +#+    +#+ +#+    +#+        +#+    +#+     +#+    +#+ +#+        +#+
- #+#    #+# #+#    #+# #+#    #+#    #+#     #+#    #+# #+#        #+#
-###    ###  ########   ########     ###     #########  ########## ##########
+Powered by Hostbee, the modern cloud billing and virtualization platform.
+Learn more: https://hostbee.app
 
 Build date (UTC): $(date -u)
 Image repository: https://github.com/hostbee/hostbee-cloud-images
