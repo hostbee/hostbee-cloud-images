@@ -4,6 +4,8 @@ echo "CN_FLAG: ${CN_FLAG}"
 echo "WORKFLOW_REF: ${WORKFLOW_REF}"
 echo "MINIO_ENDPOINT: ${MINIO_ENDPOINT}"
 
+echo "MINIO_ENDPOINT: ${{ vars.MINIO_ENDPOINT }}"
+
 TODAY=$(TZ=Asia/Shanghai date +%Y-%m-%d)
 if [ "${CN_FLAG}" = "true" ]; then
   BUCKET=hostbee-cloud-images-cn
