@@ -26,4 +26,6 @@ if [[ "${CURRENT_STAMP}" =~ ^/weekly/ ]]; then
 else
   STAMP="${TODAY}_1"
 fi
-export STAMP
+
+echo "Stamp: ${STAMP}"
+echo "STAMP=${STAMP}" >> $GITHUB_OUTPUT

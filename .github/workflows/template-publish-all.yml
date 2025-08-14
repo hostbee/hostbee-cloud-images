@@ -26,11 +26,7 @@ jobs:
           CN_FLAG: ${{ inputs.CN_FLAG }}
         working-directory: ./build_scripts
         shell: bash
-        run: |
-          source ./get-stamp.sh
-
-          echo "Stamp: ${STAMP}"
-          echo "STAMP=${STAMP}" >> $GITHUB_OUTPUT
+        run: ./get-stamp.sh
 
       - name: Sending Feishu Message
         uses: hostbee/feishu@main
