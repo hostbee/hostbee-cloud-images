@@ -12,6 +12,7 @@ on:
 
 jobs:
   get-stamp:
+    environment: OSS_KEYS
     runs-on: [self-hosted]
     outputs:
       STAMP: ${{ steps.get-stamp.outputs.STAMP }}
