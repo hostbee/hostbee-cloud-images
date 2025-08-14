@@ -16,22 +16,38 @@ jobs:
     outputs:
       STAMP: ${{ steps.get-stamp.outputs.STAMP }}
     steps:
+      # Always use the build from local Minio
       - name: Get Stamp
         id: get-stamp
         run: |
-          today=$(TZ=Asia/Shanghai date +%Y-%m-%d)
-          runs=$(curl -s \
-            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-            "https://api.github.com/repos/hostbee/hostbee-cloud-images/actions/workflows/${{ inputs.WORKFLOW_REF }}/runs?per_page=100&status=completed"
-          )
-          if ! echo "$runs" | jq .workflow_runs >/dev/null 2>&1; then
-            echo "ERROR: Failed to parse workflow runs."
-            exit 1
+          TODAY=$(TZ=Asia/Shanghai date +%Y-%m-%d)
+          if [ "${{ inputs.CN_FLAG }}" = "true" ]; then
+            BUCKET=hostbee-cloud-images-cn
+          else
+            BUCKET=hostbee-cloud-images
           fi
-          count=$(echo "$runs" | jq "[.workflow_runs[] | select((.created_at | startswith(\"${today}\")) and .conclusion == \"success\")] | length")
-          stamp=${today}_$((count + 1))
-          echo "Stamp: $stamp"
-          echo "STAMP=$stamp" >> $GITHUB_OUTPUT
+
+          CURRENT_STAMP=$(curl -s https://s3.tcloud.net/${BUCKET}/LATEST_BUILD.txt)
+
+          STAMP=""
+
+          if [[ "${CURRENT_STAMP}" =~ ^/weekly/ ]]; then
+            CURRENT_STAMP=$(echo "${CURRENT_STAMP}" | sed 's|^/weekly/||')
+            DATE=$(echo "${CURRENT_STAMP}" | cut -d'_' -f1)
+            STAMP=$(echo "${CURRENT_STAMP}" | cut -d'_' -f2)
+
+            if [ "${DATE}" != "${TODAY}" ]; then
+              STAMP="${TODAY}_1"
+            else
+              STAMP="${DATE}_$(($STAMP + 1))"
+            fi
+          else
+            STAMP="${TODAY}_1"
+          fi
+
+          echo "Stamp: ${STAMP}"
+          echo "STAMP=${STAMP}" >> $GITHUB_OUTPUT
+
       - name: Sending Feishu Message
         uses: hostbee/feishu@main
         env:
