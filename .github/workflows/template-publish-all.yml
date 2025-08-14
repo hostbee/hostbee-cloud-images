@@ -15,7 +15,8 @@ jobs:
     environment: OSS_KEYS
     runs-on: [self-hosted]
     outputs:
-      STAMP: ${{ needs.get-stamp.outputs.STAMP }}
+      STAMP: ${{ steps.get-stamp.outputs.STAMP }}
+      BUCKET: ${{ steps.get-stamp.outputs.BUCKET }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
