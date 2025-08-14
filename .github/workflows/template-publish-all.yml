@@ -24,6 +24,7 @@ jobs:
         id: get-stamp
         env:
           CN_FLAG: ${{ inputs.CN_FLAG }}
+          MINIO_ENDPOINT: ${{ vars.MINIO_ENDPOINT }}
         working-directory: ./build_scripts
         shell: bash
         run: ./get-stamp.sh
