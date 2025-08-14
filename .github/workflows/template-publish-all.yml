@@ -19,6 +19,8 @@ jobs:
       # Always use the build from local Minio
       - name: Get Stamp
         id: get-stamp
+        env:
+          CN_FLAG: ${{ inputs.CN_FLAG }}
         run: |
           source ./build_scripts/get-stamp.sh
 
