@@ -1,6 +1,8 @@
 #!/bin/bash
 
 echo "CN_FLAG: ${CN_FLAG}"
+echo "WORKFLOW_REF: ${WORKFLOW_REF}"
+echo "MINIO_ENDPOINT2: ${{ vars.MINIO_ENDPOINT }}"
 echo "MINIO_ENDPOINT: ${MINIO_ENDPOINT}"
 
 TODAY=$(TZ=Asia/Shanghai date +%Y-%m-%d)
@@ -10,7 +12,7 @@ else
   BUCKET=hostbee-cloud-images
 fi
 
-CURRENT_STAMP=$(curl -s "$MINIO_ENDPOINT/$BUCKET/LATEST_BUILD.txt")
+CURRENT_STAMP=$(curl -s "${MINIO_ENDPOINT}/${BUCKET}/LATEST_BUILD.txt")
 echo "Stamp from remote bucket ${BUCKET}: ${CURRENT_STAMP}"
 
 STAMP=""

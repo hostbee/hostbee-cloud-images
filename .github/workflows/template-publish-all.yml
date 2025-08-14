@@ -6,6 +6,9 @@ on:
       CN_FLAG:
         required: true
         type: boolean
+    MINIO_ENDPOINT:
+      required: true
+      type: string
       WORKFLOW_REF:
         required: true
         type: string
@@ -24,7 +27,7 @@ jobs:
         id: get-stamp
         env:
           CN_FLAG: ${{ inputs.CN_FLAG }}
-          MINIO_ENDPOINT: ${{ vars.MINIO_ENDPOINT }}
+          MINIO_ENDPOINT: ${{ inputs.MINIO_ENDPOINT }}
         working-directory: ./build_scripts
         shell: bash
         run: ./get-stamp.sh
