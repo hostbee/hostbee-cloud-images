@@ -38,28 +38,14 @@ jobs:
           MSGTYPE: interactive
           TITLE: "🚀 Cloud Images Build Start"
           CONTENT: |
-            > Ref: ${{ github.ref }}
-            > Commit: ${{ github.sha }}
-            > Build ID: ${{ steps.get-stamp.outputs.STAMP }}
-            > CN: ${{ inputs.CN_FLAG }}
-            > Log: https://github.com/hostbee/hostbee-cloud-images/actions/runs/${{ github.run_id }}
-
-  get-bucket:
-    runs-on: [self-hosted]
-    outputs:
-      BUCKET: ${{ steps.get-bucket.outputs.BUCKET }}
-    steps:
-      - name: Get Bucket
-        id: get-bucket
-        run: |
-          if [ "${{ inputs.CN_FLAG }}" = "true" ]; then
-            echo "BUCKET=hostbee-cloud-images-cn" >> $GITHUB_OUTPUT
-          else
-            echo "BUCKET=hostbee-cloud-images" >> $GITHUB_OUTPUT
-          fi
+            Ref: ${{ github.ref }}
+            Commit: ${{ github.sha }}
+            Build ID: ${{ steps.get-stamp.outputs.STAMP }}
+            CN: ${{ inputs.CN_FLAG }}
+            Log: https://github.com/hostbee/hostbee-cloud-images/actions/runs/${{ github.run_id }}
 
   publish-batch:
-    needs: [get-stamp, get-bucket]
+    needs: [get-stamp]
     uses: ./.github/workflows/template-publish.yml
     strategy:
       max-parallel: 3
@@ -77,13 +63,13 @@ jobs:
     with:
       TEMPLATE: ${{ matrix.TEMPLATE }}
       CN_FLAG: ${{ inputs.CN_FLAG }}
-      BUCKET: ${{ needs.get-bucket.outputs.BUCKET }}
+      BUCKET: ${{ steps.get-stamp.outputs.BUCKET }}
       MINIO_DIR: weekly/${{ needs.get-stamp.outputs.STAMP }}
     secrets: inherit
 
   update-latest:
     environment: OSS_KEYS
-    needs: [get-stamp, get-bucket, publish-batch]
+    needs: [get-stamp, publish-batch]
     runs-on: [self-hosted]
     steps:
       - name: Checkout
@@ -102,8 +88,8 @@ jobs:
       - name: Update Latest
         run: |
           echo "/weekly/${{ needs.get-stamp.outputs.STAMP }}" > "./LATEST_BUILD.txt"
-          mc cp "./LATEST_BUILD.txt" "hostbee_minio/${{ needs.get-bucket.outputs.BUCKET }}/LATEST_BUILD.txt"
-          mc cp "./LATEST_BUILD.txt" "hostbee_r2/${{ needs.get-bucket.outputs.BUCKET }}/LATEST_BUILD.txt"
+          mc cp "./LATEST_BUILD.txt" "hostbee_minio/${{ steps.get-stamp.outputs.BUCKET }}/LATEST_BUILD.txt"
+          mc cp "./LATEST_BUILD.txt" "hostbee_r2/${{ steps.get-stamp.outputs.BUCKET }}/LATEST_BUILD.txt"
 
       - name: Sending Feishu Message
         uses: hostbee/feishu@main
@@ -113,11 +99,12 @@ jobs:
           MSGTYPE: interactive
           TITLE: "✅ Cloud Images Build Done"
           CONTENT: |
-            > Ref: ${{ github.ref }}
-            > Commit: ${{ github.sha }}
-            > Build ID: ${{ needs.get-stamp.outputs.STAMP }}
-            > CN: ${{ inputs.CN_FLAG }}
-            > Log: https://github.com/hostbee/hostbee-cloud-images/actions/runs/${{ github.run_id }}
+            Ref: ${{ github.ref }}
+            Commit: ${{ github.sha }}
+            Build ID: ${{ needs.get-stamp.outputs.STAMP }}
+            Bucket: ${{ steps.get-stamp.outputs.BUCKET }}
+            CN: ${{ inputs.CN_FLAG }}
+            Log: https://github.com/hostbee/hostbee-cloud-images/actions/runs/${{ github.run_id }}
 
   message-on-fail:
     needs: [publish-batch]
@@ -136,7 +123,7 @@ jobs:
           MSGTYPE: interactive
           TITLE: "❌ Cloud Images Build Failed"
           CONTENT: |
-            > Ref: ${{ github.ref }}
-            > Commit: ${{ github.sha }}
-            > CN: ${{ inputs.CN_FLAG }}
-            > Log: https://github.com/hostbee/hostbee-cloud-images/actions/runs/${{ github.run_id }}
+            Ref: ${{ github.ref }}
+            Commit: ${{ github.sha }}
+            CN: ${{ inputs.CN_FLAG }}
+            Log: https://github.com/hostbee/hostbee-cloud-images/actions/runs/${{ github.run_id }}

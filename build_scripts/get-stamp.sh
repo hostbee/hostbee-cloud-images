@@ -34,4 +34,7 @@ else
 fi
 
 echo "Stamp: ${STAMP}"
+echo "BUCKET: ${BUCKET}"
+
 echo "STAMP=${STAMP}" >> $GITHUB_OUTPUT
+echo "BUCKET=${BUCKET}" >> $GITHUB_OUTPUT
