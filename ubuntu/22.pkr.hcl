@@ -47,7 +47,8 @@ source "qemu" "ubuntu" {
   iso_checksum              = "file:https://mirror.nju.edu.cn/ubuntu-cloud-images/${var.ubuntu_version}/current/SHA256SUMS"
   iso_url                   = "https://mirror.nju.edu.cn/ubuntu-cloud-images/${var.ubuntu_version}/current/${var.ubuntu_version}-server-cloudimg-amd64.img"
   output_directory          = "${var.cn_flag == "true" ? "output-ubuntu-22-cn" : "output-ubuntu-22"}"
-  shutdown_command          = "sudo -S shutdown -P now"
+  shutdown_command          = "sudo -S /root/cleanup.sh"
+  shutdown_timeout          = "15s"
   ssh_username              = "builder"
   ssh_private_key_file      = local.ssh_private_key_file
   ssh_clear_authorized_keys = true
