@@ -21,8 +21,10 @@ jobs:
         id: get-stamp
         env:
           CN_FLAG: ${{ inputs.CN_FLAG }}
+        working-directory: ./build_scripts
+        shell: bash
         run: |
-          source ./build_scripts/get-stamp.sh
+          source ./get-stamp.sh
 
           echo "Stamp: ${STAMP}"
           echo "STAMP=${STAMP}" >> $GITHUB_OUTPUT
