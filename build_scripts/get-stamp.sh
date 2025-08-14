@@ -1,7 +1,9 @@
 #!/bin/bash -eux
 
+echo "CN_FLAG: ${CN_FLAG}"
+
 TODAY=$(TZ=Asia/Shanghai date +%Y-%m-%d)
-if [ "${{ inputs.CN_FLAG }}" = "true" ]; then
+if [ "${CN_FLAG}" = "true" ]; then
   BUCKET=hostbee-cloud-images-cn
 else
   BUCKET=hostbee-cloud-images
