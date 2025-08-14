@@ -41,7 +41,7 @@ source "qemu" "rocky" {
   iso_checksum              = "file:https://mirror.nju.edu.cn/rocky/9/images/x86_64/Rocky-9-GenericCloud.latest.x86_64.qcow2.CHECKSUM"
   iso_url                   = "https://mirror.nju.edu.cn/rocky/9/images/x86_64/Rocky-9-GenericCloud.latest.x86_64.qcow2"
   output_directory          = "${var.cn_flag == "true" ? "output-rocky-9-cn" : "output-rocky-9"}"
-  shutdown_command          = "sudo -S sh -c /root/cleanup.sh"
+  shutdown_command          = "sudo -S bash /root/cleanup.sh"
   shutdown_timeout          = "15s"
   ssh_username              = "builder"
   ssh_private_key_file      = local.ssh_private_key_file
