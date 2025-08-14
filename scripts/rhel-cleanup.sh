@@ -23,7 +23,7 @@ echo "==> remove /var/cache"
 find /var/cache -type f -exec rm -f {} \;
 
 echo "==> Cleanup yum cache"
-#yum -y autoremove
+yum -y autoremove
 yum clean all
 rm -rf /var/cache/yum/*
 
