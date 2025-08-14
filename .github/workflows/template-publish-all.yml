@@ -15,7 +15,7 @@ jobs:
     environment: OSS_KEYS
     runs-on: [self-hosted]
     outputs:
-      STAMP: ${{ steps.get-stamp.outputs.STAMP }}
+      STAMP: ${{ needs.get-stamp.outputs.STAMP }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -40,7 +40,7 @@ jobs:
           CONTENT: |
             Ref: ${{ github.ref }}
             Commit: ${{ github.sha }}
-            Build ID: ${{ steps.get-stamp.outputs.STAMP }}
+            Build ID: ${{ needs.get-stamp.outputs.STAMP }}
             CN: ${{ inputs.CN_FLAG }}
             Log: https://github.com/hostbee/hostbee-cloud-images/actions/runs/${{ github.run_id }}
 
@@ -63,7 +63,7 @@ jobs:
     with:
       TEMPLATE: ${{ matrix.TEMPLATE }}
       CN_FLAG: ${{ inputs.CN_FLAG }}
-      BUCKET: ${{ steps.get-stamp.outputs.BUCKET }}
+      BUCKET: ${{ needs.get-stamp.outputs.BUCKET }}
       MINIO_DIR: weekly/${{ needs.get-stamp.outputs.STAMP }}
     secrets: inherit
 
@@ -88,8 +88,8 @@ jobs:
       - name: Update Latest
         run: |
           echo "/weekly/${{ needs.get-stamp.outputs.STAMP }}" > "./LATEST_BUILD.txt"
-          mc cp "./LATEST_BUILD.txt" "hostbee_minio/${{ steps.get-stamp.outputs.BUCKET }}/LATEST_BUILD.txt"
-          mc cp "./LATEST_BUILD.txt" "hostbee_r2/${{ steps.get-stamp.outputs.BUCKET }}/LATEST_BUILD.txt"
+          mc cp "./LATEST_BUILD.txt" "hostbee_minio/${{ needs.get-stamp.outputs.BUCKET }}/LATEST_BUILD.txt"
+          mc cp "./LATEST_BUILD.txt" "hostbee_r2/${{ needs.get-stamp.outputs.BUCKET }}/LATEST_BUILD.txt"
 
       - name: Sending Feishu Message
         uses: hostbee/feishu@main
@@ -102,7 +102,7 @@ jobs:
             Ref: ${{ github.ref }}
             Commit: ${{ github.sha }}
             Build ID: ${{ needs.get-stamp.outputs.STAMP }}
-            Bucket: ${{ steps.get-stamp.outputs.BUCKET }}
+            Bucket: ${{ needs.get-stamp.outputs.BUCKET }}
             CN: ${{ inputs.CN_FLAG }}
             Log: https://github.com/hostbee/hostbee-cloud-images/actions/runs/${{ github.run_id }}
 
