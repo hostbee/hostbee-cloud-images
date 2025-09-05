@@ -16,7 +16,8 @@ if [ "$CN_FLAG" == "true" ]; then
                 -e 's|security.debian.org|mirrors.ustc.edu.cn|g' \
                 -e 's|deb.debian.org/debian-security|mirrors.ustc.edu.cn/debian-security|g' \
                 /etc/apt/mirrors/debian-security.list
-
+    sudo sed -i '/^ - package-update-upgrade-install$/d' /etc/cloud/cloud.cfg
+    sudo sed -i '/^ - apt-configure$/d' /etc/cloud/cloud.cfg
 else
     echo "use default sources"
 fi

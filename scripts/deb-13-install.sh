@@ -8,6 +8,7 @@ done
 
 echo "==> change repo souces"
 if [ "$CN_FLAG" == "true" ]; then
+    echo "use CN sources"
     CN_MIRROR="mirrors.ustc.edu.cn"
     MAIN_MIRROR_FILE="/etc/apt/mirrors/debian.list"
     SECURITY_MIRROR_FILE="/etc/apt/mirrors/debian-security.list"
@@ -15,6 +16,8 @@ if [ "$CN_FLAG" == "true" ]; then
     sudo sed -i -e "s|security.debian.org/debian-security|${CN_MIRROR}/debian-security|g" \
                 -e "s|deb.debian.org/debian-security|${CN_MIRROR}/debian-security|g" \
                 -e "s|security.debian.org|${CN_MIRROR}|g" "$SECURITY_MIRROR_FILE"
+    sudo sed -i '/^ - package-update-upgrade-install$/d' /etc/cloud/cloud.cfg
+    sudo sed -i '/^ - apt-configure$/d' /etc/cloud/cloud.cfg
 else
     echo "use default sources"
 fi
